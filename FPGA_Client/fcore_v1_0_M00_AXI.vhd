@@ -1,10 +1,10 @@
-library ieee;
-use ieee.std_logic_1164.all;
-use ieee.numeric_std.all;
+LIBRARY ieee;
+USE ieee.std_logic_1164.ALL;
+USE ieee.numeric_std.ALL;
 
 -- MASTER
-entity fcore_v1_0_M00_AXI is
-  generic (
+ENTITY fcore_v1_0_M00_AXI IS
+  GENERIC (
     -- Users to add parameters here
 
     -- User parameters ends
@@ -25,133 +25,172 @@ entity fcore_v1_0_M00_AXI is
     -- and read transactions the master will perform as a part of this example memory test.
     C_M_TRANSACTIONS_NUM       : integer          := 4
     );
-  port (
+  PORT (
     -- Users to add ports here
-    CtrThd     : in  std_logic_vector(31 downto 0);
-    NumReq    : in  std_logic_vector(31 downto 0);
-    MmuBase    : in  std_logic_vector(31 downto 0);
-    TimerBack  : out std_logic_vector(31 downto 0);
-    info_valid : in  std_logic;
-    readcount : in std_logic_vector(5 downto 0);
-  	ReqResultBack : out  std_logic_vector(31 downto 0);
-    readresultcount : in std_logic_vector(5 downto 0); 
-	allocation_size : in std_logic_vector(31 downto 0);
+    CtrThd          : IN  std_logic_vector(31 DOWNTO 0);
+    NumReq          : IN  std_logic_vector(31 DOWNTO 0);
+    MmuBase         : IN  std_logic_vector(31 DOWNTO 0);
+    TimerBack       : OUT std_logic_vector(31 DOWNTO 0);
+    info_valid      : IN  std_logic;
+    readcount       : IN  std_logic_vector(5 DOWNTO 0);
+    ReqResultBack   : OUT std_logic_vector(31 DOWNTO 0);
+    readresultcount : IN  std_logic_vector(5 DOWNTO 0);
+    allocation_size : IN  std_logic_vector(31 DOWNTO 0);
     -- User ports ends
     -- Do not modify the ports beyond this line
 
     -- Initiate AXI transactions
- --   INIT_AXI_TXN  : in  std_logic;
+    --   INIT_AXI_TXN  : in  std_logic;
     -- Asserts when ERROR is detected
-    error         : out std_logic;
+    error         : OUT std_logic;
     -- Asserts when AXI transactions is complete
-    TXN_DONE      : out std_logic;
+    TXN_DONE      : OUT std_logic;
     -- AXI clock signal
-    M_AXI_ACLK    : in  std_logic;
+    M_AXI_ACLK    : IN  std_logic;
     -- AXI active low reset signal
-    M_AXI_ARESETN : in  std_logic;
+    M_AXI_ARESETN : IN  std_logic;
     -- Master Interface Write Address Channel ports. Write address (issued by master)
-    M_AXI_AWADDR  : out std_logic_vector(C_M_AXI_ADDR_WIDTH-1 downto 0);
+    M_AXI_AWADDR  : OUT std_logic_vector(C_M_AXI_ADDR_WIDTH-1 DOWNTO 0);
     -- Write channel Protection type.
     -- This signal indicates the privilege and security level of the transaction,
     -- and whether the transaction is a data access or an instruction access.
-    M_AXI_AWPROT  : out std_logic_vector(2 downto 0);
+    M_AXI_AWPROT  : OUT std_logic_vector(2 DOWNTO 0);
     -- Write address valid. 
     -- This signal indicates that the master signaling valid write address and control information.
-    M_AXI_AWVALID : out std_logic;
+    M_AXI_AWVALID : OUT std_logic;
     -- Write address ready. 
     -- This signal indicates that the slave is ready to accept an address and associated control signals.
-    M_AXI_AWREADY : in  std_logic;
+    M_AXI_AWREADY : IN  std_logic;
     -- Master Interface Write Data Channel ports. Write data (issued by master)
-    M_AXI_WDATA   : out std_logic_vector(C_M_AXI_DATA_WIDTH-1 downto 0);
+    M_AXI_WDATA   : OUT std_logic_vector(C_M_AXI_DATA_WIDTH-1 DOWNTO 0);
     -- Write strobes. 
     -- This signal indicates which byte lanes hold valid data.
     -- There is one write strobe bit for each eight bits of the write data bus.
-    M_AXI_WSTRB   : out std_logic_vector(C_M_AXI_DATA_WIDTH/8-1 downto 0);
+    M_AXI_WSTRB   : OUT std_logic_vector(C_M_AXI_DATA_WIDTH/8-1 DOWNTO 0);
     -- Write valid. This signal indicates that valid write data and strobes are available.
-    M_AXI_WVALID  : out std_logic;
+    M_AXI_WVALID  : OUT std_logic;
     -- Write ready. This signal indicates that the slave can accept the write data.
-    M_AXI_WREADY  : in  std_logic;
+    M_AXI_WREADY  : IN  std_logic;
     -- Master Interface Write Response Channel ports. 
     -- This signal indicates the status of the write transaction.
-    M_AXI_BRESP   : in  std_logic_vector(1 downto 0);
+    M_AXI_BRESP   : IN  std_logic_vector(1 DOWNTO 0);
     -- Write response valid. 
     -- This signal indicates that the channel is signaling a valid write response
-    M_AXI_BVALID  : in  std_logic;
+    M_AXI_BVALID  : IN  std_logic;
     -- Response ready. This signal indicates that the master can accept a write response.
-    M_AXI_BREADY  : out std_logic;
+    M_AXI_BREADY  : OUT std_logic;
     -- Master Interface Read Address Channel ports. Read address (issued by master)
-    M_AXI_ARADDR  : out std_logic_vector(C_M_AXI_ADDR_WIDTH-1 downto 0);
+    M_AXI_ARADDR  : OUT std_logic_vector(C_M_AXI_ADDR_WIDTH-1 DOWNTO 0);
     -- Protection type. 
     -- This signal indicates the privilege and security level of the transaction, 
     -- and whether the transaction is a data access or an instruction access.
-    M_AXI_ARPROT  : out std_logic_vector(2 downto 0);
+    M_AXI_ARPROT  : OUT std_logic_vector(2 DOWNTO 0);
     -- Read address valid. 
     -- This signal indicates that the channel is signaling valid read address and control information.
-    M_AXI_ARVALID : out std_logic;
+    M_AXI_ARVALID : OUT std_logic;
     -- Read address ready. 
     -- This signal indicates that the slave is ready to accept an address and associated control signals.
-    M_AXI_ARREADY : in  std_logic;
+    M_AXI_ARREADY : IN  std_logic;
     -- Master Interface Read Data Channel ports. Read data (issued by slave)
-    M_AXI_RDATA   : in  std_logic_vector(C_M_AXI_DATA_WIDTH-1 downto 0);
+    M_AXI_RDATA   : IN  std_logic_vector(C_M_AXI_DATA_WIDTH-1 DOWNTO 0);
     -- Read response. This signal indicates the status of the read transfer.
-    M_AXI_RRESP   : in  std_logic_vector(1 downto 0);
+    M_AXI_RRESP   : IN  std_logic_vector(1 DOWNTO 0);
     -- Read valid. This signal indicates that the channel is signaling the required read data.
-    M_AXI_RVALID  : in  std_logic;
+    M_AXI_RVALID  : IN  std_logic;
     -- Read ready. This signal indicates that the master can accept the read data and response information.
-    M_AXI_RREADY  : out std_logic
+    M_AXI_RREADY  : OUT std_logic
     );
-end fcore_v1_0_M00_AXI;
+END fcore_v1_0_M00_AXI;
 
-architecture implementation of fcore_v1_0_M00_AXI is
+ARCHITECTURE implementation OF fcore_v1_0_M00_AXI IS
+
+  -- new signals
+  TYPE FreeData IS ARRAY (0 TO 3) OF std_logic_vector(31 DOWNTO 0);
+  SIGNAL FreePointer : FreeData;
+  SIGNAL FreeDelay   : FreeData;
+
+  SIGNAL internal_counter, free_internal_counter : integer RANGE 0 TO 4;
+
+  SIGNAL command : unsigned(4 DOWNTO 0);  -- malloc 01100, free 10000
+
+  SIGNAL request_size, request_delay, delay_time : std_logic_vector(31 DOWNTO 0);
+
+  SIGNAL malloc_counter : integer RANGE 0 TO 500;
+
+  -- dummy
+  SIGNAL local_data_in : std_logic_vector(31 DOWNTO 0);
+  SIGNAL local_wea     : std_logic_vector(0 DOWNTO 0);
 
   -- My signals
-  
-  type timerType is array (0 to 39) of std_logic_vector(31 downto 0);
-  signal timerResult : timerType;
-  signal reqcount : integer range 0 to 39;
-  
-  type resultArrayType is array (0 to 39) of std_logic_vector(31 downto 0);
-  signal ResultArray : resultArrayType;
-  
-  signal timerback_i : std_logic_vector(31 downto 0) := (others => '0');
 
-  signal RateCtr_Counter : std_logic_vector(31 downto 0) := (others => '0');
+  TYPE timerType IS ARRAY (0 TO 500) OF std_logic_vector(31 DOWNTO 0);
+  SIGNAL timerResult : timerType;
+  SIGNAL reqcount    : integer RANGE 0 TO 500;
 
-  signal readcase_sel : std_logic_vector(2 downto 0) := "000";
-  
-  signal readcontent : std_logic_vector(31 downto 0);
+  TYPE resultArrayType IS ARRAY (0 TO 500) OF std_logic_vector(31 DOWNTO 0);
+  SIGNAL ResultArray : resultArrayType;
+
+  SIGNAL timerback_i : std_logic_vector(31 DOWNTO 0) := (OTHERS => '0');
+
+  SIGNAL RateCtr_Counter : std_logic_vector(31 DOWNTO 0) := (OTHERS => '0');
+
+  SIGNAL readcase_sel : std_logic_vector(2 DOWNTO 0) := "000";
+
+  SIGNAL readcontent : std_logic_vector(31 DOWNTO 0);
+
+
+  COMPONENT delayram IS
+    PORT (
+      clka  : IN  std_logic;
+      wea   : IN  std_logic_vector(0 DOWNTO 0);
+      addra : IN  std_logic_vector(8 DOWNTO 0);
+      dina  : IN  std_logic_vector(31 DOWNTO 0);
+      douta : OUT std_logic_vector(31 DOWNTO 0)
+      );
+  END COMPONENT delayram;
+
+  COMPONENT sizeram IS
+    PORT (
+      clka  : IN  std_logic;
+      wea   : IN  std_logic_vector(0 DOWNTO 0);
+      addra : IN  std_logic_vector(8 DOWNTO 0);
+      dina  : IN  std_logic_vector(31 DOWNTO 0);
+      douta : OUT std_logic_vector(31 DOWNTO 0)
+      );
+  END COMPONENT sizeram;
+
 
   -- function called clogb2 that returns an integer which has the
   -- value of the ceiling of the log base 2
-  function clogb2 (bit_depth : integer) return integer is
-    variable depth : integer := bit_depth;
-    variable count : integer := 1;
-  begin
-    for clogb2 in 1 to bit_depth loop   -- Works for up to 32 bit integers
-      if (bit_depth <= 2) then
+  FUNCTION clogb2 (bit_depth : integer) RETURN integer IS
+    VARIABLE depth : integer := bit_depth;
+    VARIABLE count : integer := 1;
+  BEGIN
+    FOR clogb2 IN 1 TO bit_depth LOOP   -- Works for up to 32 bit integers
+      IF (bit_depth <= 2) THEN
         count := 1;
-      else
-        if(depth <= 1) then
+      ELSE
+        IF(depth <= 1) THEN
           count := count;
-        else
+        ELSE
           depth := depth / 2;
           count := count + 1;
-        end if;
-      end if;
-    end loop;
-    return(count);
-  end;
+        END IF;
+      END IF;
+    END LOOP;
+    RETURN(count);
+  END;
 
   -- Example user application signals
 
   -- TRANS_NUM_BITS is the width of the index counter for
   -- number of write or read transaction..
-  constant TRANS_NUM_BITS : integer := clogb2(C_M_TRANSACTIONS_NUM-1);
+  CONSTANT TRANS_NUM_BITS : integer := clogb2(C_M_TRANSACTIONS_NUM-1);
 
   -- Example State machine to initialize counter, initialize write transactions, 
   -- initialize read transactions and comparison of read data with the 
   -- written data words.
-  type state is (INITIAL,
+  TYPE state IS (INITIAL,
                  IDLE,        -- This state initiates AXI4Lite transaction
                  -- after the state machine changes state to INIT_WRITE
                  -- when there is 0 to 1 transition on INIT_AXI_TXN
@@ -167,65 +206,65 @@ architecture implementation of fcore_v1_0_M00_AXI is
                  );
   -- of the written data with the read data
 
-  signal mst_exec_state : state;
+  SIGNAL mst_exec_state : state;
 
   -- AXI4LITE signals
   --write address valid
-  signal axi_awvalid        : std_logic;
+  SIGNAL axi_awvalid        : std_logic;
   --write data valid
-  signal axi_wvalid         : std_logic;
+  SIGNAL axi_wvalid         : std_logic;
   --read address valid
-  signal axi_arvalid        : std_logic;
+  SIGNAL axi_arvalid        : std_logic;
   --read data acceptance
-  signal axi_rready         : std_logic;
+  SIGNAL axi_rready         : std_logic;
   --write response acceptance
-  signal axi_bready         : std_logic;
+  SIGNAL axi_bready         : std_logic;
   --write address
-  signal axi_awaddr         : std_logic_vector(C_M_AXI_ADDR_WIDTH-1 downto 0);
+  SIGNAL axi_awaddr         : std_logic_vector(C_M_AXI_ADDR_WIDTH-1 DOWNTO 0);
   --write data
-  signal axi_wdata          : std_logic_vector(C_M_AXI_DATA_WIDTH-1 downto 0);
+  SIGNAL axi_wdata          : std_logic_vector(C_M_AXI_DATA_WIDTH-1 DOWNTO 0);
   --read addresss
-  signal axi_araddr         : std_logic_vector(C_M_AXI_ADDR_WIDTH-1 downto 0);
+  SIGNAL axi_araddr         : std_logic_vector(C_M_AXI_ADDR_WIDTH-1 DOWNTO 0);
   --Asserts when there is a write response error
-  signal write_resp_error   : std_logic;
+  SIGNAL write_resp_error   : std_logic;
   --Asserts when there is a read response error
-  signal read_resp_error    : std_logic;
+  SIGNAL read_resp_error    : std_logic;
   --A pulse to initiate a write transaction
-  signal start_single_write : std_logic;
+  SIGNAL start_single_write : std_logic;
   --A pulse to initiate a read transaction
-  signal start_single_read  : std_logic;
+  SIGNAL start_single_read  : std_logic;
   --Asserts when a single beat write transaction is issued and remains asserted till the completion of write trasaction.
-  signal write_issued       : std_logic;
+  SIGNAL write_issued       : std_logic;
   --Asserts when a single beat read transaction is issued and remains asserted till the completion of read trasaction.
-  signal read_issued        : std_logic;
+  SIGNAL read_issued        : std_logic;
   --flag that marks the completion of write trasactions. The number of write transaction is user selected by the parameter C_M_TRANSACTIONS_NUM.
-  signal writes_done        : std_logic;
+  SIGNAL writes_done        : std_logic;
   --flag that marks the completion of read trasactions. The number of read transaction is user selected by the parameter C_M_TRANSACTIONS_NUM
-  signal reads_done         : std_logic;
+  SIGNAL reads_done         : std_logic;
 
 
 
-begin
+BEGIN
   -- I/O Connections assignments
 
   --Adding the offset address to the base addr of the slave
-  M_AXI_AWADDR   <= axi_awaddr;
+  M_AXI_AWADDR  <= axi_awaddr;
   --AXI 4 write data
-  M_AXI_WDATA    <= axi_wdata;
-  M_AXI_AWPROT   <= "000";
-  M_AXI_AWVALID  <= axi_awvalid;
+  M_AXI_WDATA   <= axi_wdata;
+  M_AXI_AWPROT  <= "000";
+  M_AXI_AWVALID <= axi_awvalid;
   --Write Data(W)
-  M_AXI_WVALID   <= axi_wvalid;
+  M_AXI_WVALID  <= axi_wvalid;
   --Set all byte strobes in this example
-  M_AXI_WSTRB    <= "1111";
+  M_AXI_WSTRB   <= "1111";
   --Write Response (B)
-  M_AXI_BREADY   <= axi_bready;
+  M_AXI_BREADY  <= axi_bready;
   --Read Address (AR)
-  M_AXI_ARADDR   <= axi_araddr;
-  M_AXI_ARVALID  <= axi_arvalid;
-  M_AXI_ARPROT   <= "001";
+  M_AXI_ARADDR  <= axi_araddr;
+  M_AXI_ARVALID <= axi_arvalid;
+  M_AXI_ARPROT  <= "001";
   --Read and Read Response (R)
-  M_AXI_RREADY   <= axi_rready;
+  M_AXI_RREADY  <= axi_rready;
   --Example design I/O
 
   ----------------------
@@ -252,24 +291,24 @@ begin
   -- there will not be a collision between a new request and an accepted
   -- request on the same clock cycle. 
 
-  process(M_AXI_ACLK)
-  begin
-    if (rising_edge (M_AXI_ACLK)) then
+  PROCESS(M_AXI_ACLK)
+  BEGIN
+    IF (rising_edge (M_AXI_ACLK)) THEN
       --Only VALID signals must be deasserted during reset per AXI spec             
       --Consider inverting then registering active-low reset for higher fmax        
-      if (M_AXI_ARESETN = '0') then
+      IF (M_AXI_ARESETN = '0') THEN
         axi_awvalid <= '0';
-      else
+      ELSE
         --Signal a new address/data command is available by user logic              
-        if (start_single_write = '1') then
+        IF (start_single_write = '1') THEN
           axi_awvalid <= '1';
-        elsif (M_AXI_AWREADY = '1' and axi_awvalid = '1') then
+        ELSIF (M_AXI_AWREADY = '1' AND axi_awvalid = '1') THEN
           --Address accepted by interconnect/slave (issue of M_AXI_AWREADY by slave)
           axi_awvalid <= '0';
-        end if;
-      end if;
-    end if;
-  end process;
+        END IF;
+      END IF;
+    END IF;
+  END PROCESS;
 
   -- start_single_write triggers a new write                                        
   -- transaction. write_index is a counter to                                       
@@ -286,22 +325,22 @@ begin
   --The data generation is speific to the example design, and 
   --so only the WVALID/WREADY handshake is shown here
 
-  process(M_AXI_ACLK)
-  begin
-    if (rising_edge (M_AXI_ACLK)) then
-      if (M_AXI_ARESETN = '0') then
+  PROCESS(M_AXI_ACLK)
+  BEGIN
+    IF (rising_edge (M_AXI_ACLK)) THEN
+      IF (M_AXI_ARESETN = '0') THEN
         axi_wvalid <= '0';
-      else
-        if (start_single_write = '1') then
+      ELSE
+        IF (start_single_write = '1') THEN
           --Signal a new address/data command is available by user logic        
           axi_wvalid <= '1';
-        elsif (M_AXI_WREADY = '1' and axi_wvalid = '1') then
+        ELSIF (M_AXI_WREADY = '1' AND axi_wvalid = '1') THEN
           --Data accepted by interconnect/slave (issue of M_AXI_WREADY by slave)
           axi_wvalid <= '0';
-        end if;
-      end if;
-    end if;
-  end process;
+        END IF;
+      END IF;
+    END IF;
+  END PROCESS;
 
 
   ------------------------------
@@ -319,25 +358,25 @@ begin
   --While not necessary per spec, it is advisable to reset READY signals in
   --case of differing reset latencies between master/slave.
 
-  process(M_AXI_ACLK)
-  begin
-    if (rising_edge (M_AXI_ACLK)) then
-      if (M_AXI_ARESETN = '0') then
+  PROCESS(M_AXI_ACLK)
+  BEGIN
+    IF (rising_edge (M_AXI_ACLK)) THEN
+      IF (M_AXI_ARESETN = '0') THEN
         axi_bready <= '0';
-      else
-        if (M_AXI_BVALID = '1' and axi_bready = '0') then
+      ELSE
+        IF (M_AXI_BVALID = '1' AND axi_bready = '0') THEN
           -- accept/acknowledge bresp with axi_bready by the master    
           -- when M_AXI_BVALID is asserted by slave                    
           axi_bready <= '1';
-        elsif (axi_bready = '1') then
+        ELSIF (axi_bready = '1') THEN
           -- deassert after one clock cycle                            
           axi_bready <= '0';
-        end if;
-      end if;
-    end if;
-  end process;
+        END IF;
+      END IF;
+    END IF;
+  END PROCESS;
   --Flag write errors                                                    
-  write_resp_error <= (axi_bready and M_AXI_BVALID and M_AXI_BRESP(1));
+  write_resp_error <= (axi_bready AND M_AXI_BVALID AND M_AXI_BRESP(1));
 
 
   ------------------------------
@@ -347,22 +386,22 @@ begin
   -- A new axi_arvalid is asserted when there is a valid read address              
   -- available by the master. start_single_read triggers a new read                
   -- transaction                                                                   
-  process(M_AXI_ACLK)
-  begin
-    if (rising_edge (M_AXI_ACLK)) then
-      if (M_AXI_ARESETN = '0') then
+  PROCESS(M_AXI_ACLK)
+  BEGIN
+    IF (rising_edge (M_AXI_ACLK)) THEN
+      IF (M_AXI_ARESETN = '0') THEN
         axi_arvalid <= '0';
-      else
-        if (start_single_read = '1') then
+      ELSE
+        IF (start_single_read = '1') THEN
           --Signal a new read address command is available by user logic           
           axi_arvalid <= '1';
-        elsif (M_AXI_ARREADY = '1' and axi_arvalid = '1') then
+        ELSIF (M_AXI_ARREADY = '1' AND axi_arvalid = '1') THEN
           --RAddress accepted by interconnect/slave (issue of M_AXI_ARREADY by slave)
           axi_arvalid <= '0';
-        end if;
-      end if;
-    end if;
-  end process;
+        END IF;
+      END IF;
+    END IF;
+  END PROCESS;
 
 
   ----------------------------------
@@ -375,26 +414,26 @@ begin
   --While not necessary per spec, it is advisable to reset READY signals in
   --case of differing reset latencies between master/slave.
 
-  process(M_AXI_ACLK)
-  begin
-    if (rising_edge (M_AXI_ACLK)) then
-      if (M_AXI_ARESETN = '0') then
+  PROCESS(M_AXI_ACLK)
+  BEGIN
+    IF (rising_edge (M_AXI_ACLK)) THEN
+      IF (M_AXI_ARESETN = '0') THEN
         axi_rready <= '1';
-      else
-        if (M_AXI_RVALID = '1' and axi_rready = '0') then
+      ELSE
+        IF (M_AXI_RVALID = '1' AND axi_rready = '0') THEN
           -- accept/acknowledge rdata/rresp with axi_rready by the master
           -- when M_AXI_RVALID is asserted by slave                      
           axi_rready <= '1';
-        elsif (axi_rready = '1') then
+        ELSIF (axi_rready = '1') THEN
           -- deassert after one clock cycle                             
           axi_rready <= '0';
-        end if;
-      end if;
-    end if;
-  end process;
+        END IF;
+      END IF;
+    END IF;
+  END PROCESS;
 
   --Flag write errors                                                     
-  read_resp_error <= (axi_rready and M_AXI_RVALID and M_AXI_RRESP(1));
+  read_resp_error <= (axi_rready AND M_AXI_RVALID AND M_AXI_RRESP(1));
 
 
   ----------------------------------
@@ -408,54 +447,49 @@ begin
   --Modify these as desired for different address patterns.
 
   --  Write Addresses                                                               
-  process(MmuBase)
-  begin
---    if (rising_edge (M_AXI_ACLK)) then
---      if (M_AXI_ARESETN = '0') then
---      elsif (M_AXI_AWREADY = '1' and axi_awvalid = '1') then
-        -- Signals a new write address/ write data is                               
-        -- available by user logic                                                  
-        axi_awaddr <= std_logic_vector (unsigned(MmuBase) + 12);
- --     end if;
- --   end if;
-  end process;
+  PROCESS(MmuBase, command)
+  BEGIN
+    axi_awaddr <= std_logic_vector(unsigned(MmuBase) + command);
+  END PROCESS;
 
   -- Read Addresses                                                                      
-  process(readcase_sel,MmuBase)
-  begin
-  
-        case readcase_sel is
-          when "001" =>                 -- token
-            axi_araddr <= MmuBase;
-          when "010" =>                 -- donebit
-            axi_araddr <= std_logic_vector(unsigned(MmuBase) + 4);
-          when "100" =>                 -- result
-            axi_araddr <= std_logic_vector(unsigned(MmuBase) + 8);
-          when others => null;
-        end case;
+  PROCESS(readcase_sel, MmuBase)
+  BEGIN
+    
+    CASE readcase_sel IS
+      WHEN "001" =>                     -- token
+        axi_araddr <= MmuBase;
+      WHEN "010" =>                     -- donebit
+        axi_araddr <= std_logic_vector(unsigned(MmuBase) + 4);
+      WHEN "100" =>                     -- result
+        axi_araddr <= std_logic_vector(unsigned(MmuBase) + 8);
+      WHEN OTHERS => NULL;
+    END CASE;
 
-  end process;
+  END PROCESS;
 
   -- Write data                                                                          
-  process(M_AXI_ACLK)
-  begin
-    if (rising_edge (M_AXI_ACLK)) then
---      if (M_AXI_ARESETN = '0') then
---        axi_wdata <= NumReq;
- --     elsif (M_AXI_WREADY = '1' and axi_wvalid = '1') then
-        -- Signals a new write address/ write data is                               
-        -- available by user logic                                                  
-        axi_wdata <= allocation_size; --ALLOCATION SIZE
---      end if;
-    end if;
-  end process;
+  PROCESS(M_AXI_ACLK)
+  BEGIN
+    IF (rising_edge (M_AXI_ACLK)) THEN
+
+      --axi_wdata <= allocation_size; --ALLOCATION SIZE
+      IF command = "01100" THEN
+        axi_wdata <= request_size;
+      END IF;
+      IF command = "10000" THEN         -- free
+        axi_wdata <= FreePointer(free_internal_counter);
+      END IF;
+      
+    END IF;
+  END PROCESS;
 
 
   --implement master command interface state machine                                           
-  MASTER_EXECUTION_PROC : process(M_AXI_ACLK)
-  begin
-    if (rising_edge (M_AXI_ACLK)) then
-      if (M_AXI_ARESETN = '0') then
+  MASTER_EXECUTION_PROC : PROCESS(M_AXI_ACLK)
+  BEGIN
+    IF (rising_edge (M_AXI_ACLK)) THEN
+      IF (M_AXI_ARESETN = '0') THEN
         -- reset condition                                                                          
         -- All the signals are ed default values under reset condition                              
         mst_exec_state     <= INITIAL;
@@ -464,161 +498,218 @@ begin
         start_single_read  <= '0';
         read_issued        <= '0';
         error              <= '0';
-      else
+      ELSE
         
-        if (mst_exec_state /= INITIAL) and (mst_exec_state /= IDLE) then
+        IF (mst_exec_state /= INITIAL) AND (mst_exec_state /= IDLE) THEN
           timerback_i <= std_logic_vector(unsigned(timerback_i)+1);
-          if mst_exec_state = INIT_READ and reads_done = '1' and readcase_sel = "100" then             
-             timerResult(reqcount) <= timerback_i;
-			 timerback_i <= (others =>'0');
-             reqcount <= reqcount + 1;   
-             ResultArray(reqcount) <= M_AXI_RDATA;
-             
-             --TimerBack      <= timerback_i;
-             --TimerBack <= M_AXI_RDATA;
-          end if;
-        end if;
+          IF mst_exec_state = INIT_READ AND reads_done = '1' AND readcase_sel = "100" THEN
+            timerResult(reqcount) <= timerback_i;
+            timerback_i           <= (OTHERS => '0');
+            reqcount              <= reqcount + 1;
+            ResultArray(reqcount) <= M_AXI_RDATA;
+
+            IF command = "01100" THEN   -- if malloc
+              malloc_counter                <= malloc_counter + 1;
+              FreePointer(internal_counter) <= M_AXI_RDATA;  -- keeps pointer
+              FreeDelay(internal_counter)   <= request_delay;
+              internal_counter              <= internal_counter + 1;  -- increment counter
+            END IF;
+            IF command = "10000" THEN   -- if free
+              free_internal_counter <= free_internal_counter + 1;
+            END IF;
+          END IF;
+        END IF;
 
         -- state transition                                                                         
-        case (mst_exec_state) is
+        CASE (mst_exec_state) IS
           
-          when INITIAL =>
-            
-            reqcount <= 0;
-            if info_valid = '1' then
+          WHEN INITIAL =>
+            command               <= "01100";  -- malloc
+            free_internal_counter <= 0;
+            internal_counter      <= 0;
+            reqcount              <= 0;
+            malloc_counter        <= 0;
+            IF info_valid = '1' THEN
               mst_exec_state <= IDLE;
-            end if;
-                        
-          when IDLE =>           
-                    
-            read_issued <= '0';
-            mst_exec_state <= IDLE;           
+            END IF;
+            
+          WHEN IDLE =>
+            
+            read_issued    <= '0';
+            mst_exec_state <= IDLE;
 
             RateCtr_Counter <= std_logic_vector(unsigned(RateCtr_Counter) + 1);
 
-            if reqcount = unsigned(NumReq) then 
-                mst_exec_state <= INITIAL;
-            elsif RateCtr_Counter = CtrThd then
-              mst_exec_state       <= RTOKEN;
-            end if;
+            IF reqcount = unsigned(NumReq) THEN
+              mst_exec_state <= INITIAL;
+            --elsif RateCtr_Counter = CtrThd then
+            ELSIF RateCtr_Counter = delay_time THEN
+              mst_exec_state <= RTOKEN;
+            END IF;
             
-          when INIT_WRITE =>
+          WHEN INIT_WRITE =>
             -- This state is responsible to issue start_single_write pulse to                       
             -- initiate a write transaction. Write transactions will be                             
             -- issued until last_write signal is asserted.                                          
             -- write controller                                                                     
-            if (writes_done = '1') then
+            IF (writes_done = '1') THEN
               mst_exec_state <= RDONE;
-            else
+              -- when write is issued, increment the internal counter
+              
+            ELSE
               mst_exec_state <= INIT_WRITE;
               
-              if (axi_awvalid = '0' and axi_wvalid = '0' and M_AXI_BVALID = '0' and
-                  start_single_write = '0' and write_issued = '0') then          
+              IF (axi_awvalid = '0' AND axi_wvalid = '0' AND M_AXI_BVALID = '0' AND
+                  start_single_write = '0' AND write_issued = '0') THEN          
                 start_single_write <= '1';
                 write_issued       <= '1';
-              else
+              ELSE
                 start_single_write <= '0';  --Negate to generate a pulse                             
-              end if;
-            end if;
+              END IF;
+            END IF;
             
-          when INIT_READ =>
+          WHEN INIT_READ =>
             -- This state is responsible to issue start_single_read pulse to                        
             -- initiate a read transaction. Read transactions will be                               
             -- issued until last_read signal is asserted.                                           
             -- read controller                                                                      
-            if (reads_done = '1') then
-             readcontent <= M_AXI_RDATA;
-              case readcase_sel is
-                when "001" =>           -- token
+            IF (reads_done = '1') THEN
+              readcontent <= M_AXI_RDATA;
+              CASE readcase_sel IS
+                WHEN "001" =>           -- token
                   mst_exec_state <= RTOKEN;
-                when "010" =>           -- donebit
+                WHEN "010" =>           -- donebit
                   mst_exec_state <= RDONE;
-                when "100" =>           -- result
+                WHEN "100" =>           -- result
                   mst_exec_state <= IDLE;
-         --   mst_exec_state <= INITIAL;  -- FOR NOW
-                  when others => null;
-              end case;
-            else
+                --   mst_exec_state <= INITIAL;  -- FOR NOW
+                WHEN OTHERS => NULL;
+              END CASE;
+            ELSE
               mst_exec_state <= INIT_READ;
               
-              if (axi_arvalid = '0' and M_AXI_RVALID = '0' and
-                  start_single_read = '0' and read_issued = '0') then                                 
+              IF (axi_arvalid = '0' AND M_AXI_RVALID = '0' AND
+                  start_single_read = '0' AND read_issued = '0') THEN                                 
                 start_single_read <= '1';
                 read_issued       <= '1';
-              else
+              ELSE
                 start_single_read <= '0';  --Negate to generate a pulse                              
-              end if;
-            end if;
+              END IF;
+            END IF;
 
-          when RTOKEN =>
+          WHEN RTOKEN =>
             read_issued     <= '0';
             readcase_sel    <= "001";
-            RateCtr_Counter <= (others => '0');  -- reset rate control counter
+            RateCtr_Counter <= (OTHERS => '0');  -- reset rate control counter
             mst_exec_state  <= INIT_READ;
-            if readcontent(0) = '1' then
+            IF readcontent(0) = '1' THEN
               mst_exec_state <= INIT_WRITE;
-			  readcontent <= (others => '0');
-            end if;
+              readcontent    <= (OTHERS => '0');
+            END IF;
             
-          when RDONE =>
+          WHEN RDONE =>
             write_issued   <= '0';
             read_issued    <= '0';
             readcase_sel   <= "010";
             mst_exec_state <= INIT_READ;
-            if readcontent(0) = '1' then
+            IF readcontent(0) = '1' THEN
               mst_exec_state <= RRESULT;
-			  readcontent <= (others => '0');
-            end if;
-          when RRESULT =>
+              readcontent    <= (OTHERS => '0');
+            END IF;
+          WHEN RRESULT =>
             readcase_sel   <= "100";
             mst_exec_state <= INIT_READ;
 
-          when others =>
+          WHEN OTHERS =>
             mst_exec_state <= IDLE;
-        end case;
-      end if;
-    end if;
-  end process;
+        END CASE;
 
-	  process(M_AXI_ACLK)                                                                               
-	  begin                                                                                             
-	    if (rising_edge (M_AXI_ACLK)) then                                                              
-	      if (M_AXI_ARESETN = '0') then                                                                
-	        -- reset condition                                                                          
-	        writes_done <= '0';                                                                         
-	      else   
-	      writes_done <= '0';                                                                                       
-	        if (M_AXI_BVALID = '1' and axi_bready = '1') then                      
-	          --The writes_done should be associated with a bready response                             
-	          writes_done <= '1';                                                                       
-	        end if;                                                                                     
-	      end if;                                                                                       
-	    end if;                                                                                         
-	  end process;     
-	  
-	  	  process(M_AXI_ACLK)                                                                               
-      begin                                                                                             
-        if (rising_edge (M_AXI_ACLK)) then                                                              
-          if (M_AXI_ARESETN = '0') then                                                                
-            reads_done <= '0';                                                                          
-          else      
-			reads_done <= '0'; 
-            if (M_AXI_RVALID = '1' and axi_rready = '1') then                       
-              --The reads_done should be associated with a read ready response                          
-              reads_done <= '1'; 
-			 end if;                                                                                     
-          end if;                                                                                       
-        end if;                                                                                         
-      end process;              
-	  
-	  process(readcount)
-	  begin
-	   TimerBack <= timerResult(to_integer(unsigned(readcount)));
-	   ReqResultBack <= ResultArray(to_integer(unsigned(readresultcount)));
-	  end process;
-	  
+        IF internal_counter = 4 and command = "01100" THEN
+          -- change command from malloc to free
+          command               <= "10000";
+          free_internal_counter <= 0;
+        END IF;
+
+        IF free_internal_counter = 4 AND command = "10000" THEN
+          -- change command from free to malloc
+          command          <= "01100";
+          internal_counter <= 0;
+        END IF;
+        
+        
+      END IF;
+    END IF;
+  END PROCESS;
+
+  PROCESS(M_AXI_ACLK)
+  BEGIN
+    IF (rising_edge (M_AXI_ACLK)) THEN
+      IF (M_AXI_ARESETN = '0') THEN
+        -- reset condition                                                                          
+        writes_done <= '0';
+      ELSE
+        writes_done <= '0';
+        IF (M_AXI_BVALID = '1' AND axi_bready = '1') THEN
+          --The writes_done should be associated with a bready response                             
+          writes_done <= '1';
+        END IF;
+      END IF;
+    END IF;
+  END PROCESS;
+
+  PROCESS(M_AXI_ACLK)
+  BEGIN
+    IF (rising_edge (M_AXI_ACLK)) THEN
+      IF (M_AXI_ARESETN = '0') THEN
+        reads_done <= '0';
+      ELSE
+        reads_done <= '0';
+        IF (M_AXI_RVALID = '1' AND axi_rready = '1') THEN
+          --The reads_done should be associated with a read ready response                          
+          reads_done <= '1';
+        END IF;
+      END IF;
+    END IF;
+  END PROCESS;
+
+  PROCESS(request_delay, FreeDelay, free_internal_counter, command)
+  BEGIN    
+    delay_time <= request_delay;
+    IF command = "10000" THEN
+      delay_time <= FreeDelay(free_internal_counter);
+    END IF;
+    
+  END PROCESS;
+
+  PROCESS(readcount)
+  BEGIN
+    TimerBack     <= timerResult(to_integer(unsigned(readcount)));
+    ReqResultBack <= ResultArray(to_integer(unsigned(readresultcount)));
+  END PROCESS;
+
+  -- PORT MAPS
+
+  mydelay : delayram
+    PORT MAP(
+      clka  => M_AXI_ACLK,
+      wea   => local_wea,
+      addra => std_logic_vector(to_unsigned(malloc_counter, 9)),
+      dina  => local_data_in,
+      douta => request_delay
+      );
+
+  mysize : sizeram
+    PORT MAP(
+      clka  => M_AXI_ACLK,
+      wea   => local_wea,
+      addra => std_logic_vector(to_unsigned(malloc_counter, 9)),
+      dina  => local_data_in,
+      douta => request_size
+      );          
+
+
   -- Add user logic here
 
   -- User logic ends
 
-end implementation;
+END implementation;
