@@ -22,9 +22,9 @@ entity fcore_v1_0_S00_AXI is
     MmuBase    : out std_logic_vector(31 downto 0);
     TimerBack  : in  std_logic_vector(31 downto 0);
     info_valid : out std_logic;
-    readcount : out std_logic_vector(5 downto 0);
+    readcount : out std_logic_vector(31 downto 0);
 	ReqResultBack : in  std_logic_vector(31 downto 0);
-	readresultcount : out std_logic_vector(5 downto 0);
+	readresultcount : out std_logic_vector(31 downto 0);
 	allocation_size : out std_logic_vector(31 downto 0);
 
     -- User ports ends
@@ -95,8 +95,8 @@ end fcore_v1_0_S00_AXI;
 
 architecture arch_imp of fcore_v1_0_S00_AXI is
 
-    signal readcount_i : integer range 0 to 39;
-	signal resultcount_i : integer range 0 to 39;
+    signal readcount_i : integer range 0 to 500;
+	signal resultcount_i : integer range 0 to 500;
 
   -- AXI4LITE signals
   -- signal axi_awaddr  : std_logic_vector(C_S_AXI_ADDR_WIDTH-1 downto 0);
@@ -404,8 +404,8 @@ begin
   slv_reg3 <= TimerBack;
   slv_reg4 <= ReqResultBack;
   
-  readcount <= std_logic_vector(to_unsigned(readcount_i,6));
-  readresultcount <= std_logic_vector(to_unsigned(resultcount_i,6));
+  readcount <= std_logic_vector(to_unsigned(readcount_i,32));
+  readresultcount <= std_logic_vector(to_unsigned(resultcount_i,32));
 
 	allocation_size <= slv_reg5;
 

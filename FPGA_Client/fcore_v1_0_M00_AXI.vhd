@@ -32,9 +32,9 @@ ENTITY fcore_v1_0_M00_AXI IS
     MmuBase         : IN  std_logic_vector(31 DOWNTO 0);
     TimerBack       : OUT std_logic_vector(31 DOWNTO 0);
     info_valid      : IN  std_logic;
-    readcount       : IN  std_logic_vector(5 DOWNTO 0);
+    readcount       : IN  std_logic_vector(31 DOWNTO 0);
     ReqResultBack   : OUT std_logic_vector(31 DOWNTO 0);
-    readresultcount : IN  std_logic_vector(5 DOWNTO 0);
+    readresultcount : IN  std_logic_vector(31 DOWNTO 0);
     allocation_size : IN  std_logic_vector(31 DOWNTO 0);
     -- User ports ends
     -- Do not modify the ports beyond this line

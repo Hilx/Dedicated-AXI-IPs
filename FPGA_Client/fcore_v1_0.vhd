@@ -96,9 +96,9 @@ architecture arch_imp of fcore_v1_0 is
         MmuBase    : out std_logic_vector(31 downto 0);
         TimerBack  : in  std_logic_vector(31 downto 0);
         info_valid : out std_logic;
-        readcount : out std_logic_vector(5 downto 0);
+        readcount : out std_logic_vector(31 downto 0);
  	    ReqResultBack : in  std_logic_vector(31 downto 0);
-        readresultcount : out std_logic_vector(5 downto 0); 
+        readresultcount : out std_logic_vector(31 downto 0); 
 	allocation_size : out std_logic_vector(31 downto 0);		
            
 		S_AXI_ACLK	: in std_logic;
@@ -139,9 +139,9 @@ architecture arch_imp of fcore_v1_0 is
         MmuBase    : in  std_logic_vector(31 downto 0);
         TimerBack  : out std_logic_vector(31 downto 0);
         info_valid : in  std_logic;
-        readcount : in std_logic_vector(5 downto 0);
+        readcount : in std_logic_vector(31 downto 0);
   	    ReqResultBack : out  std_logic_vector(31 downto 0);
-        readresultcount : in std_logic_vector(5 downto 0); 
+        readresultcount : in std_logic_vector(31 downto 0); 
 	allocation_size : in std_logic_vector(31 downto 0);        
 --		INIT_AXI_TXN	: in std_logic;
 		ERROR	: out std_logic;
@@ -175,9 +175,9 @@ architecture arch_imp of fcore_v1_0 is
 	signal MmuBase: std_logic_vector(31 downto 0);
 	signal TimerBack: std_logic_vector(31 downto 0);
 	signal info_valid : std_logic;
-	signal readcount : std_logic_vector(5 downto 0);
+	signal readcount : std_logic_vector(31 downto 0);
 	signal ReqResultBack :  std_logic_vector(31 downto 0);
-    signal readresultcount : std_logic_vector(5 downto 0);
+    signal readresultcount : std_logic_vector(31 downto 0);
 	signal allocation_size : std_logic_vector(31 downto 0);
 
 
