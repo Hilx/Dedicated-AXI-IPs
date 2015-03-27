@@ -2,6 +2,8 @@
 #include "platform.h"
 #include "xil_cache.h"
 
+
+
 #define CSTART 0
 #define NUMREQ 4
 #define RESULT 8
@@ -11,12 +13,12 @@
 #define LATBACK 24
 
 int FCORE_BASE[15] = {0x43C00000, 0x43C10000, 0x43C20000, 0x43C30000, 0x43C40000,
-			          0x43C50000, 0x43C60000, 0x43C00000, 0x43C80000, 0x43C90000,
+			          0x43C50000, 0x43C60000, 0x43C70000, 0x43C80000, 0x43C90000,
 			          0x43CA0000, 0x43CB0000, 0x43CC0000, 0x43CD0000, 0x43CE0000};
 
 int req_count;
-int *pointer_array[100];
-int mf_counter, malloc_counter,free_counter;
+int *pointer_array[15][200];
+int malloc_counter[15],free_counter[15];
 
 void print(char *str);
 
@@ -36,7 +38,7 @@ int main()
     /* ---------------------------------------------------------*/
     num_client_working = 1;
     /*----------------------------------------------------------*/
-    req_each = 8;
+    req_each = 80;
 
     // tell each fpga client how many requests they need to perform
     for(i = 0; i< num_client_working; i++)
@@ -67,21 +69,32 @@ int main()
 
 void allocator(int num_req,int num_core){
 
+
 	int cmd;
 	int client_id;
 	int content;
+	int i;
 
 	int res;
 
 	req_count = 0;
 	client_id = 0;
 
+	for(i = 0; i < 15; i++){
+		malloc_counter[i] = 0;
+		free_counter[i] = 0;
+	}
+
+
 	cmd = check_clients(client_id);
 
 	while(req_count < num_req){
 
+		//xil_printf(" req id %d \r\n", req_count);
 		cmd = check_clients(client_id);
+		//xil_printf(" new cmd read %d \r\n", cmd);
 		while(cmd == 0){
+			//xil_printf(" check cmd %d, client_id %d \r\n", cmd, client_id);
 			if(client_id == num_core - 1){ client_id = 0;}
 			else{ client_id++; }
 			cmd = check_clients(client_id);
@@ -89,23 +102,27 @@ void allocator(int num_req,int num_core){
 		// read request content
 		content =  Xil_In32(FCORE_BASE[client_id] + CONTENT);
 
+		//xil_printf(" read content %d \r\n",content);
+
 		if(cmd == 1){
-			pointer_array[malloc_counter] = (char*)malloc(content);
-			Xil_Out32(FCORE_BASE[client_id] + RESULT, &pointer_array[malloc_counter]);
-			//res = &pointer_array[malloc_counter];
-			malloc_counter ++;
+			pointer_array[client_id][malloc_counter[client_id]] = (char*)malloc(content);
+			Xil_Out32(FCORE_BASE[client_id] + RESULT, &pointer_array[client_id][malloc_counter[client_id]]);
+			//res = &pointer_array[malloc_counter[client_id]];
+			malloc_counter[client_id] ++;
+			//xil_printf(" malloc?? \r\n");
 		}else if(cmd ==2 ){
-			free(pointer_array[free_counter]);
+			free(pointer_array[client_id][free_counter[client_id]]);
 			Xil_Out32(FCORE_BASE[client_id] + RESULT, 1111);
-			if(client_id == num_core - 1){ client_id = 0;}
-			else{ client_id++; }
-			//res = &pointer_array[free_counter];
-			free_counter++;
+			//res = &pointer_array[free_counter[client_id]];
+			free_counter[client_id]++;
+			//xil_printf(" freeeee \r\n"); // stopped before here
 		}
 
-		//xil_printf(" %d %d %d %d\r\n", req_count, cmd, content, res);
+		//xil_printf(" %d %d %d %d\r\n", req_count, cmd, content, client_id);
 		cmd = 0;
 		req_count++;
+		if(client_id == num_core - 1){ client_id = 0;}
+		else{ client_id++; }
 	}
 }
 
