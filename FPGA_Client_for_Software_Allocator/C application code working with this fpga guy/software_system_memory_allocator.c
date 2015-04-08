@@ -2,8 +2,6 @@
 #include "platform.h"
 #include "xil_cache.h"
 
-
-
 #define CSTART 0
 #define NUMREQ 4
 #define RESULT 8
@@ -118,7 +116,7 @@ void allocator(int num_req,int num_core){
 			//xil_printf(" freeeee \r\n"); // stopped before here
 		}
 
-		//xil_printf(" %d %d %d %d\r\n", req_count, cmd, content, client_id);
+		xil_printf(" %d %d %d %d\r\n", req_count, cmd, content, client_id);
 		cmd = 0;
 		req_count++;
 		if(client_id == num_core - 1){ client_id = 0;}
