@@ -9,7 +9,7 @@
 7. [Vivado] **Update IPs, Re-syn,implement & Generate Bitstream.**
 8. [Software Processor eg.ARM core] **Add [MyCounter.h](https://github.com/Hilx/AXI-Peripherals/blob/master/MyCounter/ARM%20software%20Example/MyCounter.h) to your software application.**
 9. **:)**
-10. 
+
 ## HOW TO USE ##
 
 **To read the counter result out, read Reg1 (Base + 1)** Note that, the offset could be 1 or 4 depends on the offset format.
