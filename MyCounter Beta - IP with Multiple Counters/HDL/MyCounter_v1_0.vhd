@@ -12,7 +12,7 @@ ENTITY MyCounter_v1_0 IS
 
     -- Parameters of Axi Slave Bus Interface S00_AXI
     C_S00_AXI_DATA_WIDTH : integer := 32;
-    C_S00_AXI_ADDR_WIDTH : integer := 4
+    C_S00_AXI_ADDR_WIDTH : integer := 6
     );
   PORT (
     -- Users to add ports here

@@ -12,7 +12,7 @@ ENTITY MyCounter_v1_0_S00_AXI IS
     -- Width of S_AXI data bus
     C_S_AXI_DATA_WIDTH : integer := 32;
     -- Width of S_AXI address bus
-    C_S_AXI_ADDR_WIDTH : integer := 4
+    C_S_AXI_ADDR_WIDTH : integer := 6
     );
   PORT (
     -- Users to add ports here
@@ -227,7 +227,7 @@ BEGIN
   slv_reg_wren <= axi_wready AND S_AXI_WVALID AND axi_awready AND S_AXI_AWVALID;
 
   PROCESS (S_AXI_ACLK)
-    
+    variable local_addr : std_logic_vector(3 downto 0);
     VARIABLE loc_index : integer;
   BEGIN
     IF rising_edge(S_AXI_ACLK) THEN
@@ -238,7 +238,8 @@ BEGIN
           timer_reset(i) <= '0';
         END LOOP;
       ELSE
-        loc_index := (to_integer(unsigned(axi_awaddr)) + 1);
+	  local_addr := axi_awaddr(5 downto 2);
+        loc_index := (to_integer(unsigned(local_addr)) + 1);
         IF (slv_reg_wren = '1') THEN
           
           CASE S_AXI_WDATA(1 DOWNTO 0) IS
@@ -352,10 +353,12 @@ BEGIN
   slv_reg_rden <= axi_arready AND S_AXI_ARVALID AND (NOT axi_rvalid);
 
   PROCESS (timer, axi_araddr, S_AXI_ARESETN, slv_reg_rden)
+  variable local_addr : std_logic_vector(3 downto 0);
     VARIABLE loc_index : integer;
   BEGIN
     -- Address decoding for reading registers
-    loc_index    := (to_integer(unsigned(axi_araddr)) + 1);
+	local_addr := axi_araddr(5 downto 2);
+    loc_index    := (to_integer(unsigned(local_addr)) + 1);
     reg_data_out <= std_logic_vector(to_unsigned(timer(loc_index), 32));
   END PROCESS;
 
