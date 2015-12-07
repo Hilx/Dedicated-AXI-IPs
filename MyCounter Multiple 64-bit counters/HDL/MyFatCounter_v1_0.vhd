@@ -52,7 +52,7 @@ ARCHITECTURE arch_imp OF MyFatCounter_v1_0 IS
   COMPONENT MyFatCounter_v1_0_S00_AXI IS
     GENERIC (
       C_S_AXI_DATA_WIDTH : integer := 32;
-      C_S_AXI_ADDR_WIDTH : integer := 4
+      C_S_AXI_ADDR_WIDTH : integer := 6
       );
     PORT (
       S_AXI_ACLK    : IN  std_logic;

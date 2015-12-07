@@ -89,16 +89,18 @@ ARCHITECTURE arch_imp OF MyFatCounter_v1_0_S00_AXI IS
 
   -- /* new Counter Signals */
   -- [TYPE]counter themselves 
-  TYPE counter_t IS ARRAY(1 TO 16) OF unsigned(63 downto 0);
+  TYPE counter_t IS ARRAY(1 TO 16) OF integer;
   -- [TYPE]arrays of state machines TYPE
   TYPE state_machine_t IS ARRAY(1 TO 16) OF counter_state_t;
   -- [TYPE]state machines control signal arrays TYPE
   TYPE control_t IS ARRAY(1 TO 16) OF std_logic;
   -- [SIGNAL]
-  SIGNAL timer                                : counter_t;
+  SIGNAL timer,timer_high                     : counter_t;
   SIGNAL timer_state, timer_state_next        : state_machine_t;
   SIGNAL timer_start, timer_stop, timer_reset : control_t;
 
+  signal high_low_select : std_logic;
+  
   -- AXI4LITE signals
   SIGNAL axi_awaddr  : std_logic_vector(C_S_AXI_ADDR_WIDTH-1 DOWNTO 0);
   SIGNAL axi_awready : std_logic;
@@ -352,22 +354,21 @@ BEGIN
   -- and the slave is ready to accept the read address.
   slv_reg_rden <= axi_arready AND S_AXI_ARVALID AND (NOT axi_rvalid);
 
-  PROCESS (timer, axi_araddr, S_AXI_ARESETN, slv_reg_rden)
+  PROCESS (timer, timer_high, axi_araddr, S_AXI_ARESETN, slv_reg_rden,high_low_select)
   variable local_addr : std_logic_vector(2 downto 0);
-  variable high_low_select : std_logic;
-  variable temp_64bit : std_logic_vector(63 downto 0);
+
+ -- variable temp_64bit : std_logic_vector(63 downto 0);
     VARIABLE loc_index : integer;
   BEGIN
     -- Address decoding for reading registers
 	local_addr := axi_araddr(4 downto 2);
-	high_low_select := axi_araddr(5);
     loc_index    := (to_integer(unsigned(local_addr)) + 1);
     --reg_data_out <= std_logic_vector(to_unsigned(timer(loc_index), 32));
-	temp_64bit := std_logic_vector(timer(loc_index));
-	if high_low_select = '0' then
-		reg_data_out <= temp_64bit(31 downto 0);
+	--temp_64bit := std_logic_vector(timer(loc_index));
+	if axi_araddr(5) = '0' then
+		reg_data_out <=  std_logic_vector(to_unsigned(timer(loc_index),32));
 	else
-		reg_data_out <= temp_64bit(63 downto 32);
+		reg_data_out <= std_logic_vector(to_unsigned(timer_high(loc_index),32));
 	end if;
   END PROCESS;
 
@@ -432,10 +433,16 @@ BEGIN
       ELSE
         CASE timer_state(i) IS
           WHEN c_idle =>
-            timer(i) <= (others => '0');
+            timer(i) <= 0;
+			timer_high(i) <= 0;
           WHEN c_counting =>
-            timer(i) <= to_unsigned(to_integer(timer(i)) + 1, 64);
-          WHEN c_freeze =>
+			if to_unsigned(timer(i),32) = x"FFFFFFFF" then
+				timer_high(i) <= timer_high(i) + 1;
+				timer(i) <= 0;
+			else				
+				timer(i) <= timer(i) + 1;
+			end if;
+		WHEN c_freeze =>
             NULL;
           WHEN OTHERS => NULL;
         END CASE;
@@ -444,4 +451,6 @@ BEGIN
     END LOOP;
   END PROCESS;
 
+  high_low_select <= axi_araddr(5);
+  
 END arch_imp;
