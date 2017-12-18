@@ -25,7 +25,9 @@ Stop Counter ------- **||** ------- **2**
 Reset Counter ------- **||** ------ **3**
 
 **NOTE**
+
 updated: 18 Dec 2017
+
 For the first use, simply START the counter then STOP it, RESET THE COUNTER IN THE END!
 
 If counter is reseted first, there might be an error... I shall look into this to make this more robust.
